@@ -13,7 +13,7 @@ router.post('/user', async function (req, res) {
   try {
     const userid = parseInt(req.body.userid);
 
-    // Insert login info into userlogs
+    // Define new user object
     const newUser = {
       userid,
       password: req.body.password,
@@ -21,24 +21,30 @@ router.post('/user', async function (req, res) {
       created_at: new Date(),
       modified_at: new Date()
     };
-    await db.collection("userlogs").insertOne(newUser);
 
-    // Ensure profile exists in userprofiles (no duplicates)
+    // ✅ Use upsert with $setOnInsert for userlogs
+    await db.collection("userlogs").updateOne(
+      { userid },                // match by userid
+      { $setOnInsert: newUser }, // only insert if not exists
+      { upsert: true }
+    );
+
+    // ✅ Ensure profile exists in userprofiles (no duplicates)
     await db.collection("userprofiles").updateOne(
-      { id: userid }, // match by userid
+      { id: userid },
       {
         $setOnInsert: {
           department: null,
           year_of_study: null,
-          medals: 0
+          medals: 0,
+          lastModified: new Date() // set at creation
         }
       },
       { upsert: true }
     );
 
-    // After writing to both DBs, reroute to homepage
-    res.redirect(`/user/${userid}`);   // or whatever your homepage route is
-
+    // Redirect to user homepage
+    res.redirect(`/user/${userid}`);
   } catch (err) {
     res.status(400).json({ message: err.message });
   } finally {
