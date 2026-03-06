@@ -4,40 +4,37 @@ var path = require('path');
 var router = express.Router();
 const { connectToDB, ObjectId } = require('../utils/db');
 
-/* GET home page. */
+//login page route
 router.get('/', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
+//login POST function, new user can be created, existing users logged in
+//users are ONLY given user role, admin role needs to be changed in the backend
 router.post('/user', async function (req, res) {
   const db = await connectToDB();
   try {
     const userid = parseInt(req.body.userid);
     const password = req.body.password;
 
-    // 🔎 Step 1: Check if user already exists
     const existingUser = await db.collection("userlogs").findOne({ userid });
 
     if (existingUser) {
-      // ✅ If account exists, verify password
       if (existingUser.password === password) {
-        // Redirect based on role
         if (existingUser.role === "admin") {
           return res.redirect(`/admin/${userid}`);
         } else {
           return res.redirect(`/user/${userid}`);
         }
       } else {
-        // ❌ Wrong password
         return res.status(401).send("Invalid password");
       }
     }
 
-    // 🆕 Step 2: If account doesn’t exist, create one
     const newUser = {
       userid,
-      password, // ⚠️ Consider hashing this before storing
-      role: "user", // default role
+      password,
+      role: "user",
       created_at: new Date(),
       modified_at: new Date()
     };
@@ -57,7 +54,6 @@ router.post('/user', async function (req, res) {
       { upsert: true }
     );
 
-    // Redirect to user homepage
     res.redirect(`/user/${userid}`);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -66,15 +62,15 @@ router.post('/user', async function (req, res) {
   }
 });
 
+//user side homepage
+//includes leaderboard and the tasks and rival modals and settings
 router.get('/user/:id', async (req, res) => {
   const db = await connectToDB();
   try {
     const userid = parseInt(req.params.id);
 
-    // Current user's profile
     const profile = await db.collection("userprofiles").findOne({ id: userid });
 
-    // Ongoing task for this user
     const ongoingTask = await db.collection("ongoing").findOne({ userId: userid });
 
     let taskDetails = null;
@@ -85,14 +81,12 @@ router.get('/user/:id', async (req, res) => {
       });
     }
 
-    // Rival: find one pair where user1 = userid
     const rivalPair = await db.collection("pairs").findOne({ user1: userid });
     let rivalOngoing = null;
     if (rivalPair) {
       rivalOngoing = await db.collection("ongoing").findOne({ userId: rivalPair.user2 });
     }
 
-    // Leaderboard
     const students = await db.collection("userprofiles").find({}).toArray();
     const topStudents = students.sort((a, b) => b.medals - a.medals).slice(0, 5);
 
@@ -113,10 +107,10 @@ router.get('/user/:id', async (req, res) => {
   }
 });
 
+//delete existing task after deadline is made
 async function cleanupExpiredTasks(db, adminId) {
   const now = new Date();
 
-  // Find expired tasks for this admin
   const expiredTasks = await db.collection("tasks").find({
     adminId,
     deadline: { $lt: now }
@@ -131,28 +125,26 @@ async function cleanupExpiredTasks(db, adminId) {
   }
 }
 
+//admin homepage
+//includes the create task and inbox modals and the leaderboard
 router.get('/admin/:id', async (req, res) => {
   const db = await connectToDB();
   try {
     const adminId = parseInt(req.params.id);
 
-    // 🔒 Cleanup expired tasks first
     await cleanupExpiredTasks(db, adminId);
 
-    // Get the current admin’s profile
     const profile = await db.collection("userlogs").findOne({ userid: adminId });
 
-    // Fetch all students
     const students = await db.collection("userprofiles").find({}).toArray();
 
-    // Sort by medals and take top 5
     const topStudents = students
       .sort((a, b) => b.medals - a.medals)
       .slice(0, 5);
 
     res.render('admin', {
       userid: profile.userid,
-      medals: profile.medals || 0,  // safeguard if profile doesn’t have medals
+      medals: profile.medals || 0,
       topStudents
     });
   } finally {
@@ -160,6 +152,7 @@ router.get('/admin/:id', async (req, res) => {
   }
 });
 
+//patch function to add data to user information (department and year)
 router.patch('/user/:id/settings', async (req, res) => {
   const db = await connectToDB();
   try {
@@ -174,6 +167,7 @@ router.patch('/user/:id/settings', async (req, res) => {
   }
 });
 
+//create form route
 router.post('/admin/:id/create', async (req, res) => {
   const db = await connectToDB();
   try {
@@ -194,22 +188,18 @@ router.post('/admin/:id/create', async (req, res) => {
   }
 });
 
-// GET route: serve the create-task form
+//create form route handler
 router.get('/admin/:id/create/form', (req, res) => {
   const { id } = req.params;
 
-  // If using EJS template:
   res.render('task-create', { adminId: id });
 
-  // Or if serving static HTML:
-  // res.sendFile(path.join(__dirname, '../public/task-create.html'));
 });
 
-
-// Multer setup
+//for file management (send and recieve and download)
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // ensure this folder exists
+    cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
@@ -217,7 +207,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// POST route: handle task creation
+//form handler for create task
 router.post('/admin/:id/create/form', upload.single('taskZip'), async (req, res) => {
   const db = await connectToDB();
   try {
@@ -263,14 +253,12 @@ router.post('/admin/:id/create/form', upload.single('taskZip'), async (req, res)
     if (students.length > 1) {
       const pairs = [];
 
-      // If odd number, drop the last student
       const usableCount = students.length % 2 === 0 ? students.length : students.length - 1;
 
       for (let i = 0; i < usableCount; i += 2) {
         const s1 = students[i];
         const s2 = students[i + 1];
 
-        // Associative pair (A↔B and B↔A)
         pairs.push({ user1: s1.id, user2: s2.id, taskName, adminId, created_at: now });
         pairs.push({ user1: s2.id, user2: s1.id, taskName, adminId, created_at: now });
       }
@@ -283,7 +271,6 @@ router.post('/admin/:id/create/form', upload.single('taskZip'), async (req, res)
     } else {
       console.log("Not enough students to create pairs.");
     }
-    // Redirect back to admin dashboard
     res.redirect(`/admin/${adminId}`);
   } catch (err) {
     console.error(err);
@@ -293,6 +280,7 @@ router.post('/admin/:id/create/form', upload.single('taskZip'), async (req, res)
   }
 });
 
+//doesnt do much tbh
 router.get('/user', async function (req, res) {
     const db = await connectToDB();
     try {
@@ -307,6 +295,7 @@ router.get('/user', async function (req, res) {
 
 const uploadZip = multer({ storage: storage });
 
+//submit form for task route (user submits task to admin)
 router.post('/user/:id/submit', uploadZip.single('zipFile'), async (req, res) => {
   const db = await connectToDB();
   try {
@@ -326,22 +315,20 @@ router.post('/user/:id/submit', uploadZip.single('zipFile'), async (req, res) =>
   }
 });
 
+//submission tracker route
 router.get('/admin/:id/inbox', async (req, res) => {
   const db = await connectToDB();
   try {
     const adminId = parseInt(req.params.id);
 
-    // Find all ongoing tasks created by this admin
     const ongoingTasks = await db.collection("ongoing").find({ adminId }).toArray();
 
-    // Enrich with user profile and calculate time left at submission
     const submissions = await Promise.all(
       ongoingTasks.map(async (task) => {
         const user = await db.collection("userprofiles").findOne({ id: task.userId });
 
         let submissionTime = null;
         if (task.zipFile) {
-          // Time left = deadline - modified_at
           const diff = new Date(task.deadline) - new Date(task.modified_at);
           if (diff > 0) {
             const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -368,6 +355,7 @@ router.get('/admin/:id/inbox', async (req, res) => {
   }
 });
 
+//medal handler for users
 router.patch('/admin/award/:userid', async (req, res) => {
   const db = await connectToDB();
   try {
