@@ -1,0 +1,44 @@
+body {
+    background-color: black;
+}
+
+.title {
+    color: aqua;
+    font-size: 110px;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+}
+
+/* Shared style for both inputs */
+.input-field {
+    width: 80%;                /* same width for both */
+    max-width: 400px;          /* optional limit */
+    color: aqua;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 25px;
+    background-color: black;
+    border: 7px solid aqua;
+    padding: 10px;
+    display: block;
+    margin: 20px auto;
+    text-align: center;        /* centers placeholder text */
+}
+
+.btn-login {
+    color: black;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 25px;
+    background-color: aqua;
+    border: 2px solid aqua;
+    padding: 10px 75px;
+    display: block;
+    margin: 20px auto;
+    cursor: pointer;
+    transition: all 0.3s ease; /* smooth effect */
+}
+
+.btn-login:hover {
+    color: aqua;              /* text becomes aqua */
+    background-color: black;  /* background becomes black */
+    border: 2px solid aqua;   /* keep border aqua */
+}

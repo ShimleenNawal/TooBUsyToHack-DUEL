@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>All Bookings</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <table>
+        <% for (var user of userlogs) { %>
+            <tr>
+                <td><%= user.userid %></td>
+                <td><%= user.password %></td>
+            </tr>
+        <% } %>
+     </table>
+  </body>
+</html>

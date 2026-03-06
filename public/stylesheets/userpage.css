@@ -1,0 +1,57 @@
+body {
+    background-color: black;
+}
+.title{
+    color: aqua;
+    font-size: 30px;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    margin-top: 55px;
+}
+.type-writer{
+    overflow: hidden;
+    color: aqua;
+    font-size: 30px;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    margin: 55px auto;
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+    width: fit-content; 
+    animation: 
+        typing 4.5s steps(30, end), 
+        blink-caret 1s step-end infinite;
+}
+.btn-tasks {
+    color: aqua;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 25px;
+    background-color: black;
+    border: 6px solid aqua;
+    padding: 10px 21px;
+    padding-bottom: 40px;
+    padding-top: 40px;
+    margin-top: 75px;
+    margin-right: 100%;
+    margin-bottom: 30px;
+}
+.btn-rivals {
+    color: aqua;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 25px;
+    background-color: black;
+    border: 6px solid aqua;
+    padding: 10px 21px;
+    padding-bottom: 40px;
+    padding-top: 40px;
+    margin-right: 100%;
+}
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: aqua; }
+}
