@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Duel - Create Task</title>
+  
+  <!-- Link to Google Fonts (Essential for the retro look) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  
+  <!-- Link to your new stylesheet -->
+  <link rel="stylesheet" href="./stylesheets/style.css">
+</head>
+<body>
+
+  <!-- Wrapped content in a main container for consistent layout -->
+  <main class="container">
+    
+    <!-- Task Creation Box -->
+    <section class="box">
+      <h2>Create Task</h2>
+      <form id="createTaskForm">
+        <label for="taskName">Task Name</label>
+        <input type="text" id="taskName" name="taskName" required>
+        <label for="taskZip" class="file-label">Attach Zip File</label>
+        <input type="file" id="taskZip" name="taskZip" accept=".zip" required hidden>
+        <label for="taskDesc">Description</label>
+        <textarea id="taskDesc" name="taskDesc" required></textarea>
+
+        <label for="year">Year</label>
+        <select id="year" name="year" required>
+          <option value="">Select</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+        </select>
+
+        <label for="dept">Department</label>
+        <select id="dept" name="dept" required>
+          <option value="">Select</option>
+          <option>CS</option>
+          <option>IT</option>
+          <option>ENG</option>
+          <option>BUS</option>
+        </select>
+
+        <label for="deadline">Deadline</label>
+        <input type="datetime-local" id="deadline" name="deadline" required>
+
+        <button type="submit" class="submit-button">Create</button>
+      </form>
+    </section>
+  </main>
+  
+  <!-- Your JavaScript file -->
+  <script src="./javascripts/taskBox.js"></script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+body {
+    background-color: black;
+}
+.title{
+    color: aqua;
+    font-size: 30px;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    margin-top: 55px;
+}
+.type-writer{
+    overflow: hidden;
+    color: aqua;
+    font-size: 30px;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    margin: 55px auto;
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+    width: fit-content; 
+    animation: 
+        typing 4s steps(30, end)
+}
+.btn-tasks {
+    color: aqua;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 25px;
+    background-color: black;
+    border: 6px solid aqua;
+    padding: 10px 21px;
+    padding-bottom: 40px;
+    padding-top: 40px;
+    margin-top: 75px;
+    margin-right: 100%;
+    margin-bottom: 30px;
+}
+.btn-rivals {
+    color: aqua;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 25px;
+    background-color: black;
+    border: 6px solid aqua;
+    padding: 10px 33px;
+    padding-bottom: 40px;
+    padding-top: 40px;
+    margin-right: 100%;
+}
+.btn-tasks:hover {
+    background-color: aqua;
+    color: black;
+    transform: scale(1.05);
+}
+
+.btn-rivals:hover {
+    background-color: aqua;
+    color: black;
+    transform: scale(1.05);
+}
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: black;
+    color: aqua;
+    border: 2px solid aqua;
+    padding: 30px; /* Keep the padding */
+    width: 400px; /* Reduced width for a smaller box */
+    height: fit-content; /* Keep height dynamic */
+    max-height: 600px; /* Limit the height */
+    position: relative;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between; /* Space out the elements */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header .time-left {
+    font-size: 14px;
+    color: aqua;
+    margin-left: auto; /* Push to the right */
+}
+
+.modal-header .task-label {
+    font-size: 14px;
+    color: aqua;
+    margin-right: auto; /* Push to the left */
+}
+
+.modal-header .close-btn {
+    background: none;
+    border: none;
+    color: aqua;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal form input,
+.modal form textarea,
+.modal form button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    padding: 10px;
+    border: 2px solid aqua;
+    background-color: black;
+    color: aqua;
+}
+
+/* Style for the submit button */
+.modal form button {
+    background-color: aqua; /* Set the button color to aqua */
+    color: black; /* Ensure text is visible */
+    border: 2px solid black; /* Add a contrasting border */
+    transition: transform 0.2s, background-color 0.2s; /* Smooth hover effect */
+}
+
+.modal form button:hover {
+    background-color: black; /* Change background to black on hover */
+    color: aqua; /* Change text color to aqua on hover */
+    transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+/* Adjusted the width of the submit button */
+.modal form button[type="submit"] {
+    width: 150px; /* Reduced width for a smaller button */
+    background-color: aqua;
+    color: black;
+    border: 2px solid black;
+    padding: 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    margin: 10px auto; /* Center the button */
+}
+
+.modal form button[type="submit"]:hover {
+    background-color: black;
+    color: aqua;
+    transform: scale(1.05);
+}
+
+/* Ensure the Add File button is visible and styled */
+input[type="file"] {
+    display: none; /* Hide the default file input */
+}
+
+/* Style the Add File button */
+label.custom-file-upload {
+    display: inline-block;
+    background-color: black; /* Default background color */
+    color: aqua; /* Default text color */
+    border: 2px solid aqua;
+    padding: 5px 10px;
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+label.custom-file-upload:hover {
+    background-color: aqua; /* Change background to aqua on hover */
+    color: black; /* Change text color to black on hover */
+    transform: scale(1.05);
+}
+
+label.custom-file-upload:active {
+    background-color: aqua; /* Show aqua background when clicked */
+    color: black; /* Keep text color black when clicked */
+}
+
+.task-box {
+    background-color: black;
+    color: aqua;
+    border: 2px solid aqua;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-family: 'Press Start 2P', cursive;
+    text-align: left;
+}
+
+.download-attachment {
+    display: block;
+    background-color: transparent; /* Transparent background */
+    color: aqua; /* Aqua text color */
+    border: 2px solid aqua; /* Aqua border */
+    padding: 10px 20px; /* Padding for button */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px; /* Font size */
+    text-align: center; /* Center text */
+    cursor: pointer; /* Pointer cursor */
+    transition: transform 0.2s, background-color 0.2s; /* Smooth hover effect */
+}
+
+.download-attachment:hover {
+    background-color: aqua; /* Aqua background on hover */
+    color: black; /* Black text on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Styles for the Rival modal */
+.rival-info {
+    text-align: center;
+    color: aqua;
+    font-family: 'Press Start 2P', cursive;
+    margin-top: 20px;
+}
+
+.rival-info p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.rival-info h2 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.rival-info h3 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+/* Styles for the settings button */
+.settings-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    color: aqua;
+    font-size: 40px; /* Increased size for larger button */
+    transition: color 0.2s;
+}
+
+.settings-icon:hover {
+    animation: rotate360 0.5s linear; /* Rotate 360 degrees on hover */
+}
+
+.settings-icon:active {
+    transform: rotate(360deg); /* Rotate 360 degrees on click */
+    transition: transform 0.5s ease-in-out; /* Smooth rotation */
+}
+
+/* Add rotation animation to the settings button on hover */
+@keyframes rotate360 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Styles for the settings modal */
+#settingsModal .modal-content {
+    background-color: black;
+    color: aqua;
+    border: 2px solid aqua;
+    padding: 20px;
+    width: 400px;
+    height: fit-content;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+}
+
+#settingsModal label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 14px;
+    color: aqua;
+}
+
+#settingsModal select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    background-color: black;
+    color: aqua;
+    border: 2px solid aqua;
+    cursor: pointer;
+}
+
+#settingsModal button {
+    background-color: aqua;
+    color: black;
+    border: 2px solid black;
+    padding: 10px 20px;
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+#settingsModal button:hover {
+    background-color: black;
+    color: aqua;
+    transform: scale(1.05);
+}
+
+.leaderboard {
+  width: 90%;
+  margin: auto;
+  border-collapse: collapse;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  box-shadow: 0 0 15px aqua;
+}
+
+.leaderboard th,
+.leaderboard td {
+  border: 2px solid aqua;
+  padding: 12px;
+  background-color: black;   /* all cells black */
+  color: aqua;
+}
+
+.leaderboard th {
+  background-color: black;    /* header row navy, still dark */
+  color: aqua;
+}
+
+.title {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  font-family: 'Press Start 2P', cursive;
+  color: aqua;
+}
+
+.content-layout {
+  display: grid;
+  grid-template-columns: auto 1fr; /* left column auto, right column fills */
+  gap: 40px;                       /* spacing between columns */
+  align-items: start;    
+  margin-top: 120px;           /* align both at the top */
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;           /* stack buttons vertically */
+  align-items: flex-start;          /* align buttons to left edge */
+}

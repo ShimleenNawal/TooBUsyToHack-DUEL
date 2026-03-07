@@ -80,6 +80,32 @@ router.get('/user/:id', async (req, res) => {
   }
 });
 
+router.get('/admin/:id', async (req, res) => {
+  const db = await connectToDB();
+  try {
+    const userid = parseInt(req.params.id);
+
+    // Get the current user's profile
+    const profile = await db.collection("userlogs").findOne({ userid: userid });
+
+    // Step 1: Fetch all documents without sorting
+    const students = await db.collection("userprofiles").find({}).toArray();
+
+    // Step 2: Sort in Node.js (default tie-breaking: medals only)
+    const topStudents = students
+      .sort((a, b) => b.medals - a.medals) // highest medals first
+      .slice(0, 5);                        // keep top 5
+
+    res.render('admin', {
+      userid: profile.userid,
+      medals: profile.medals,
+      topStudents
+    });
+  } finally {
+    await db.client.close();
+  }
+});
+
 router.patch('/user/:id/settings', async (req, res) => {
   const db = await connectToDB();
   try {
@@ -94,6 +120,26 @@ router.patch('/user/:id/settings', async (req, res) => {
   }
 });
 
+router.post('/admin/:id/create', (req, res) => {
+  const { id } = req.params;
+
+  // You can do any pre-checks or logging here
+  console.log(`Admin ${id} clicked Create`);
+
+  // Redirect to GET route that serves the form
+  res.redirect(`/admin/${id}/create/form`);
+});
+
+// GET route: serve the create-task form
+router.get('/admin/:id/create/form', (req, res) => {
+  const { id } = req.params;
+
+  // If using EJS template:
+  res.render('task-create', { adminId: id });
+
+  // Or if serving static HTML:
+  // res.sendFile(path.join(__dirname, '../public/task-create.html'));
+});
 
 router.get('/user', async function (req, res) {
     const db = await connectToDB();

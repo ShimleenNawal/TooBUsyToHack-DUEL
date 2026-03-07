@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./stylesheets/admin.css">
+</head>
+
+<body>
+<h2 class="type-writer"> Hello, Admin </h2>
+<div class="button-container">
+  <a href="task-create.html">
+    <button class="btn-task">Create Task</button>
+  </a>
+  <a href="submissions.html">
+    <button class="btn-rivals">Submissions</button>
+  </a>
+</div>
+
+<!-- Create Task Modal -->
+<div class="modal" id="createTaskModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="task-label">Create Task</span>
+            <button class="close-btn" id="closeCreateTask">&times;</button>
+        </div>
+        <form>
+       <input type="text" placeholder="Enter task name">
+       <button type="submit">Create</button>
+       </form>
+    </div>
+</div>
+
+
+<!-- Submissions Modal -->
+<div class="modal" id="submissionModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="task-label">Submissions</span>
+            <button class="close-btn" id="closeSubmission">&times;</button>
+        </div>
+
+        <div class="rival-info">
+            <p>Student:</p>
+            <h2>23124512</h2>
+
+            <p>Status:</p>
+            <h3>Submitted</h3>
+        </div>
+    </div>
+</div>
+
+<!-- Table for Leaderboard -->
+<div class="leaderboard">
+    <table class="leaderboard-table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>User</th>
+                <th>Medals</th>
+            </tr>
+        </thead>
+    <tbody>
+    <tr>
+        <td>1</td>
+        <td>23223413</td>
+        <td>🥇15</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>23223122</td>
+        <td>🥈10</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>23224544</td>
+        <td>🥉9</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>23221471</td>
+        <td>6</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>23220912</td>
+        <td>5</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>23221441</td>
+        <td>4</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>23223459</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>23229410</td>
+        <td>2</td>
+    </tr>
+    </tbody>
+    </table>
+</div> 
+
+<script src="./javascripts/admin.js"></script>
+
+</body>
+</html>

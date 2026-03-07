@@ -1,0 +1,149 @@
+/* --- Global Styles & Font --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: aqua;
+    font-family: 'Press Start 2P', cursive;
+    padding: 40px 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* --- Header & Navigation Styles --- */
+header {
+    margin-bottom: 40px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 0px aqua;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.nav-buttons button {
+    background-color: black;
+    color: #c5c6c7;
+    border: 2px solid aqua;
+    padding: 12px 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.nav-buttons button:hover {
+    background-color: aqua;
+    color: black;
+}
+
+/* --- Form Box Styles (for task-create.html) --- */
+.box {
+    border: 2px solid aqua;
+    padding: 30px;
+    background-color: black;
+    text-align: left;
+}
+
+.box h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-size: 0.9rem;
+    color: aqua;
+    margin-bottom: -5px;
+}
+
+input, textarea, select {
+    background-color: black;
+    color: aqua;
+    border: 2px solid aqua;
+    padding: 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Style for the date/time picker icon */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(75%) sepia(21%) saturate(2891%) hue-rotate(133deg) brightness(97%) contrast(98%);
+    cursor: pointer;
+}
+
+/* --- Submit Button Style --- */
+.submit-button {
+    background-color: aqua;
+    color: black;
+    border: none;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.submit-button:hover {
+    background-color: aqua;
+}
+#taskZip {
+    background-color: black;
+    color: aqua;
+    border: 2px solid aqua;
+    padding: 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    cursor: pointer;
+    width: 100%;
+}
+.file-label {
+  display: inline-block;
+  background-color: aqua;
+  color: black;
+  border: 2px solid aqua;
+  padding: 12px 20px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.file-label:hover {
+  background-color: aqua;
+  color: black;
+}
+
+#fileName {
+  display: block;
+  margin-top: 10px;
+  color: #c5c6c7;
+  font-size: 0.8rem;
+  font-family: 'Press Start 2P', cursive;
+}
