@@ -44,37 +44,45 @@
 
     <!-- Modal Structure for Tasks -->
     <div class="modal" id="taskModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="task-label">Task</span> <!-- Changed task label to Task -->
-                <span class="time-left" id="timeLeft">Time Left: 00:00</span>
-                <button class="close-btn" id="closeModal">&times;</button>
-            </div>
-            <form id="taskForm">
-                <div class="task-box">Calculus Assignment 2</div> <!-- Updated task description to be a box with text -->
-                <button class="download-attachment">Download Attachment</button> <!-- Changed to a button -->
-                <label for="fileUpload" class="custom-file-upload">Add File</label> <!-- Custom Add File button -->
-                <input type="file" id="fileUpload" />
-                <button type="submit">Submit</button>
-            </form>
+    <div class="modal-content">
+        <div class="modal-header">
+        <span class="task-label">Task</span>
+        <span class="time-left" id="timeLeft"
+                data-deadline="<%= ongoingTask ? ongoingTask.deadline.toISOString() : '' %>">
+            Time Left: 00:00
+        </span>
+        <button class="close-btn" id="closeModal">&times;</button>
         </div>
+        <% if (ongoingTask && taskDetails) { %>
+        <form id="taskForm" enctype="multipart/form-data">
+            <div class="task-box"><%= ongoingTask.taskName %></div>
+            <a href="/<%= taskDetails.attachedFile %>" download class="download-attachment">Download Attachment</a>
+            <label for="fileUpload" class="custom-file-upload">Add File</label>
+            <input type="file" id="fileUpload" name="zipFile" />
+            <button type="submit">Submit</button>
+        </form>
+        <% } else { %>
+        <p>No active task assigned.</p>
+        <% } %>
+    </div>
     </div>
 
     <!-- Modal Structure for Rival -->
     <div class="modal" id="rivalModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="task-label">Rival</span>
-                <span class="time-left" id="rivalTimeLeft">08:15:21</span>
-                <button class="close-btn" id="closeRivalModal">&times;</button>
-            </div>
-            <div class="rival-info">
-                <p>Your Rival is:</p>
-                <h2>23223413</h2>
-                <p>Status:</p>
-                <h3>Not Submitted</h3>
-            </div>
+    <div class="modal-content">
+        <div class="modal-header">
+        <span class="task-label">Rival</span>
+        <span class="time-left" id="rivalTimeLeft"
+                data-deadline="<%= rivalDeadline || '' %>">00:00</span>
+        <button class="close-btn" id="closeRivalModal">&times;</button>
         </div>
+        <div class="rival-info">
+        <p>Your Rival is:</p>
+        <h2><%= rivalId || "No rival assigned" %></h2>
+        <p>Status:</p>
+        <h3><%= rivalSubmitted ? "Submitted" : "Not Submitted" %></h3>
+        </div>
+    </div>
     </div>
 
     <div class="settings-icon" id="settingsButton">

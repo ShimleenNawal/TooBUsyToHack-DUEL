@@ -112,3 +112,81 @@ settingsForm.addEventListener('submit', async (e) => {
     settingsModal.style.display = 'none';
   }
 });
+
+function startDeadlineCountdown(deadlineISO) {
+  if (!deadlineISO) return;
+  const deadline = new Date(deadlineISO);
+
+  const timer = setInterval(() => {
+    const now = new Date();
+    const diff = deadline - now;
+
+    if (diff <= 0) {
+      clearInterval(timer);
+      timeLeftDisplay.textContent = 'Time Left: 00:00';
+      return;
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    timeLeftDisplay.textContent = `Time Left: ${hours}:${minutes}:${seconds}`;
+  }, 1000);
+}
+
+// Start countdown when modal opens
+openModalBtn.addEventListener('click', () => {
+  taskModal.style.display = 'flex';
+  const deadlineISO = timeLeftDisplay.dataset.deadline;
+  startDeadlineCountdown(deadlineISO);
+});
+
+// Handle file upload submission
+document.getElementById('taskForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append('zipFile', document.getElementById('fileUpload').files[0]);
+
+  const response = await fetch(`/user/${userid}/submit`, {
+    method: 'POST',
+    body: formData
+  });
+
+  if (response.ok) {
+    alert('File submitted successfully!');
+    taskModal.style.display = 'none';
+  } else {
+    alert('Error submitting file.');
+  }
+});
+
+function startRivalCountdown(deadlineISO) {
+  if (!deadlineISO) return;
+  const deadline = new Date(deadlineISO);
+
+  const timer = setInterval(() => {
+    const now = new Date();
+    const diff = deadline - now;
+
+    if (diff <= 0) {
+      clearInterval(timer);
+      document.getElementById('rivalTimeLeft').textContent = '00:00';
+      return;
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('rivalTimeLeft').textContent =
+      `${hours}:${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }, 1000);
+}
+
+// Open Rival modal
+openRivalModalBtn.addEventListener('click', () => {
+  rivalModal.style.display = 'flex';
+  const deadlineISO = document.getElementById('rivalTimeLeft').dataset.deadline;
+  startRivalCountdown(deadlineISO);
+});

@@ -58,23 +58,42 @@ router.get('/user/:id', async (req, res) => {
   try {
     const userid = parseInt(req.params.id);
 
-    // Get the current user's profile
+    // Current user's profile
     const profile = await db.collection("userprofiles").findOne({ id: userid });
 
-    // Step 1: Fetch all documents without sorting
-    const students = await db.collection("userprofiles").find({}).toArray();
+    // Ongoing task for this user
+    const ongoingTask = await db.collection("ongoing").findOne({ userId: userid });
 
-    // Step 2: Sort in Node.js (default tie-breaking: medals only)
-    const topStudents = students
-      .sort((a, b) => b.medals - a.medals) // highest medals first
-      .slice(0, 5);                        // keep top 5
+    let taskDetails = null;
+    if (ongoingTask) {
+      taskDetails = await db.collection("tasks").findOne({
+        taskName: ongoingTask.taskName,
+        adminId: ongoingTask.adminId
+      });
+    }
+
+    // Rival: find one pair where user1 = userid
+    const rivalPair = await db.collection("pairs").findOne({ user1: userid });
+    let rivalOngoing = null;
+    if (rivalPair) {
+      rivalOngoing = await db.collection("ongoing").findOne({ userId: rivalPair.user2 });
+    }
+
+    // Leaderboard
+    const students = await db.collection("userprofiles").find({}).toArray();
+    const topStudents = students.sort((a, b) => b.medals - a.medals).slice(0, 5);
 
     res.render('userpage', {
       userid: profile.id,
       department: profile.department,
       year_of_study: profile.year_of_study,
       medals: profile.medals,
-      topStudents
+      topStudents,
+      ongoingTask,
+      taskDetails,
+      rivalId: rivalPair ? rivalPair.user2 : null,
+      rivalDeadline: rivalOngoing ? rivalOngoing.deadline.toISOString() : null,
+      rivalSubmitted: rivalOngoing ? !!rivalOngoing.zipFile : false
     });
   } finally {
     await db.client.close();
@@ -240,6 +259,27 @@ router.get('/user', async function (req, res) {
     } finally {
         await db.client.close();
     }
+});
+
+const uploadZip = multer({ storage: storage });
+
+router.post('/user/:id/submit', uploadZip.single('zipFile'), async (req, res) => {
+  const db = await connectToDB();
+  try {
+    const userid = parseInt(req.params.id);
+    const filePath = req.file ? req.file.path : null;
+
+    await db.collection("ongoing").updateOne(
+      { userId: userid },
+      { $set: { zipFile: filePath, modified_at: new Date() } }
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  } finally {
+    await db.client.close();
+  }
 });
 
 module.exports = router;
