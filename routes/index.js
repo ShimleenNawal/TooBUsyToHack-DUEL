@@ -100,25 +100,46 @@ router.get('/user/:id', async (req, res) => {
   }
 });
 
+async function cleanupExpiredTasks(db, adminId) {
+  const now = new Date();
+
+  // Find expired tasks for this admin
+  const expiredTasks = await db.collection("tasks").find({
+    adminId,
+    deadline: { $lt: now }
+  }).toArray();
+
+  for (const task of expiredTasks) {
+    await db.collection("tasks").deleteOne({ _id: task._id });
+    await db.collection("ongoing").deleteMany({ taskName: task.taskName, adminId: task.adminId });
+    await db.collection("pairs").deleteMany({ taskName: task.taskName, adminId: task.adminId });
+
+    console.log(`Cleaned up expired task "${task.taskName}" for admin ${adminId}`);
+  }
+}
+
 router.get('/admin/:id', async (req, res) => {
   const db = await connectToDB();
   try {
-    const userid = parseInt(req.params.id);
+    const adminId = parseInt(req.params.id);
 
-    // Get the current user's profile
-    const profile = await db.collection("userlogs").findOne({ userid: userid });
+    // 🔒 Cleanup expired tasks first
+    await cleanupExpiredTasks(db, adminId);
 
-    // Step 1: Fetch all documents without sorting
+    // Get the current admin’s profile
+    const profile = await db.collection("userlogs").findOne({ userid: adminId });
+
+    // Fetch all students
     const students = await db.collection("userprofiles").find({}).toArray();
 
-    // Step 2: Sort in Node.js (default tie-breaking: medals only)
+    // Sort by medals and take top 5
     const topStudents = students
-      .sort((a, b) => b.medals - a.medals) // highest medals first
-      .slice(0, 5);                        // keep top 5
+      .sort((a, b) => b.medals - a.medals)
+      .slice(0, 5);
 
     res.render('admin', {
       userid: profile.userid,
-      medals: profile.medals,
+      medals: profile.medals || 0,  // safeguard if profile doesn’t have medals
       topStudents
     });
   } finally {
@@ -140,14 +161,24 @@ router.patch('/user/:id/settings', async (req, res) => {
   }
 });
 
-router.post('/admin/:id/create', (req, res) => {
-  const { id } = req.params;
+router.post('/admin/:id/create', async (req, res) => {
+  const db = await connectToDB();
+  try {
+    const adminId = parseInt(req.params.id);
 
-  // You can do any pre-checks or logging here
-  console.log(`Admin ${id} clicked Create`);
+    const activeTask = await db.collection("tasks").findOne({
+      adminId,
+      deadline: { $gt: new Date() }
+    });
 
-  // Redirect to GET route that serves the form
-  res.redirect(`/admin/${id}/create/form`);
+    if (activeTask) {
+      return res.send("You already have an active task. Wait until its deadline before creating a new one.");
+    }
+
+    res.redirect(`/admin/${adminId}/create/form`);
+  } finally {
+    await db.client.close();
+  }
 });
 
 // GET route: serve the create-task form
