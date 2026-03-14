@@ -19,6 +19,18 @@ DUEL is the productivity enhancing website that aims to foster a sense of proact
 
 There are so many productivity trackers on the market that design whats effectively a calendar app or a tracker, trusting the user to be proactive and productive. DUEL believes iron sharpens iron and takes an aggressive approach to productivity and proactivity, pitting two people of simillar skill up against eachother to finish the same task, with the purpose of seeing who can finish it faster. Ofcourse, we also value quality, which is why medals are assigned by the admin manually. We at DUEL believe that productivity begins when users stop fighting deadlines and start competing with eachother. DUEL can have applications in corporate, local and university and we hope to one day integrate it into HKBU Moodle which is our university's all in one assignment management system.
 
+## My Contribution
+
+This project was built during a hackathon as a team collaboration.
+
+My role focused on the **frontend interface and project presentation**, including:
+
+* Implementing **HTML structure for the admin interface**
+* Supporting layout and page organization
+* Demonstrating the project during the **presentation video**
+
+Original team repository: https://github.com/M3AT-H00K/TooBUsyToHack-DUEL
+
 ## Tech stack
 
 -HTML,Css (basic outlines and structuring)
