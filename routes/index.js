@@ -2,6 +2,7 @@ const multer = require('multer');
 var express = require('express');
 var path = require('path');
 var router = express.Router();
+require('dotenv').config();
 const { connectToDB, ObjectId } = require('../utils/db');
 
 //login page route
